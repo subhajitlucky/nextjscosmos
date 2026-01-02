@@ -78,7 +78,7 @@ export function FetchOptionsVisualizer() {
                   borderColor: status === 'executing' ? 'var(--primary)' : 'rgba(0,0,0,0.1)',
                   rotate: status === 'executing' ? 360 : 0
                 }}
-                transition={{ duration: 1.5, repeat: status === 'execulating' ? Infinity : 0 }}
+                transition={{ duration: 1.5, repeat: status === 'executing' ? Infinity : 0 }}
                 className="w-24 h-24 rounded-full border-4 border-dashed bg-background flex items-center justify-center shadow-2xl"
               >
                  <Settings className={status === 'executing' ? 'text-primary' : 'text-muted-foreground/20'} />
