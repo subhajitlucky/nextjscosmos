@@ -30,6 +30,11 @@ import { FormHandlingVisualizer } from "@/components/visualizers/form-handling-v
 import { OptimisticVisualizer } from "@/components/visualizers/optimistic-visualizer"
 import { PPRVisualizer } from "@/components/visualizers/ppr-visualizer"
 import { SecurityVisualizer } from "@/components/visualizers/security-visualizer"
+import { HydrationErrorVisualizer } from "@/components/visualizers/hydration-error-visualizer"
+import { MissingDirectiveVisualizer } from "@/components/visualizers/missing-directive-visualizer"
+import { SerializationErrorVisualizer } from "@/components/visualizers/serialization-error-visualizer"
+import { BailoutVisualizer } from "@/components/visualizers/bailout-visualizer"
+import { ParamsErrorVisualizer } from "@/components/visualizers/params-error-visualizer"
 import { ConceptNavigation } from "@/components/concept-navigation"
 import { Button } from "@/components/ui/button"
 import { useProgress } from "@/lib/progress-store"
@@ -45,9 +50,10 @@ interface ConceptLayoutProps {
   mentalModel: string
   whyExists: string
   codeExample: string
-  visualizerType: 'routing' | 'rendering' | 'streaming' | 'rsc' | 'hydration' | 'ssr' | 'ssg' | 'data-flow' | 'boundary' | 'layout-template' | 'error' | 'parallel' | 'middleware' | 'route-handler' | 'caching' | 'advanced-caching' | 'image' | 'deployment' | 'server-action' | 'form-handling' | 'optimistic' | 'ppr' | 'security' | 'not-found' | 'intercepting' | 'isr' | 'fetch-options' | 'metadata'
+  visualizerType: 'routing' | 'rendering' | 'streaming' | 'rsc' | 'hydration' | 'ssr' | 'ssg' | 'data-flow' | 'boundary' | 'layout-template' | 'error' | 'parallel' | 'middleware' | 'route-handler' | 'caching' | 'advanced-caching' | 'image' | 'deployment' | 'server-action' | 'form-handling' | 'optimistic' | 'ppr' | 'security' | 'not-found' | 'intercepting' | 'isr' | 'fetch-options' | 'metadata' | 'hydration-error' | 'missing-directive' | 'serialization-error' | 'bailout-error' | 'params-error'
   visualizerProps?: any
   misconception?: string
+  isErrorPage?: boolean
 }
 
 export function ConceptLayout({
@@ -60,7 +66,8 @@ export function ConceptLayout({
   codeExample,
   visualizerType,
   visualizerProps,
-  misconception
+  misconception,
+  isErrorPage = false
 }: ConceptLayoutProps) {
   const { isCompleted, toggleComplete, isLoaded } = useProgress()
   const [mounted, setMounted] = useState(false)
@@ -79,11 +86,11 @@ export function ConceptLayout({
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
                <div>
                   <Link 
-                    href="/concepts" 
+                    href={isErrorPage ? "/errors" : "/concepts"} 
                     className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary transition-colors mb-8 group"
                   >
                     <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform" />
-                    Back to Mastery Path
+                    {isErrorPage ? "Back to Event Horizon" : "Back to Mastery Path"}
                   </Link>
                   <div className="flex items-center gap-2 text-primary font-bold text-xs uppercase tracking-[0.2em] mb-6">
                     <div className="h-px w-8 bg-primary/30" />
@@ -170,6 +177,11 @@ export function ConceptLayout({
                   {visualizerType === 'not-found' && <NotFoundVisualizer {...visualizerProps} />}
                   {visualizerType === 'intercepting' && <InterceptingVisualizer {...visualizerProps} />}
                   {visualizerType === 'isr' && <ISRVisualizer {...visualizerProps} />}
+                  {visualizerType === 'hydration-error' && <HydrationErrorVisualizer {...visualizerProps} />}
+                  {visualizerType === 'missing-directive' && <MissingDirectiveVisualizer {...visualizerProps} />}
+                  {visualizerType === 'serialization-error' && <SerializationErrorVisualizer {...visualizerProps} />}
+                  {visualizerType === 'bailout-error' && <BailoutVisualizer {...visualizerProps} />}
+                  {visualizerType === 'params-error' && <ParamsErrorVisualizer {...visualizerProps} />}
                 </div>
              </CardContent>
           </Card>
@@ -245,7 +257,7 @@ export function ConceptLayout({
         
         {/* Navigation below the grid */}
         <div className="pt-8">
-           <ConceptNavigation currentSlug={slug} />
+           <ConceptNavigation currentSlug={slug} isErrorPage={isErrorPage} />
         </div>
       </div>
     </div>

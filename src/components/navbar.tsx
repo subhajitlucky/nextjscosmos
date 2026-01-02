@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { ModeToggle } from "@/components/mode-toggle"
-import { LayoutDashboard, Github, Trophy, Menu, BookOpen, FlaskConical, ChevronRight } from "lucide-react"
+import { LayoutDashboard, Github, Trophy, Menu, BookOpen, FlaskConical, ChevronRight, AlertOctagon } from "lucide-react"
 import { TopicSearch } from "@/components/topic-search"
 import { useProgress } from "@/lib/progress-store"
 import { masteryPath } from "@/lib/concepts-data"
@@ -54,6 +54,12 @@ export function Navbar() {
                   {percentage}%
                 </span>
               )}
+            </Link>
+            <Link
+              href="/errors"
+              className="transition-colors hover:text-primary text-muted-foreground"
+            >
+              Errors
             </Link>
             <Link
               href="/playground"
@@ -117,6 +123,23 @@ export function Navbar() {
                         <div>
                           <p className="font-bold text-sm">Concepts</p>
                           <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Mastery Path</p>
+                        </div>
+                      </div>
+                      <ChevronRight className="h-4 w-4 text-muted-foreground/50 group-hover:text-primary transition-colors" />
+                    </Link>
+
+                    <Link
+                      href="/errors"
+                      onClick={() => setIsOpen(false)}
+                      className="flex items-center justify-between p-3 rounded-xl hover:bg-primary/5 transition-all group"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                          <AlertOctagon className="h-5 w-5" />
+                        </div>
+                        <div>
+                          <p className="font-bold text-sm">Errors</p>
+                          <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Common Pitfalls</p>
                         </div>
                       </div>
                       <ChevronRight className="h-4 w-4 text-muted-foreground/50 group-hover:text-primary transition-colors" />

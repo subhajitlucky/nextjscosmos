@@ -1,16 +1,27 @@
 import Link from "next/link"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { getNavigation } from "@/lib/concepts-data"
+import { getErrorNavigation } from "@/lib/errors-data"
 
-export function ConceptNavigation({ currentSlug }: { currentSlug: string }) {
-  const { prev, next } = getNavigation(currentSlug)
+export function ConceptNavigation({ 
+  currentSlug, 
+  isErrorPage = false 
+}: { 
+  currentSlug: string,
+  isErrorPage?: boolean
+}) {
+  const { prev, next } = isErrorPage 
+    ? getErrorNavigation(currentSlug)
+    : getNavigation(currentSlug)
+
+  const basePath = isErrorPage ? "/errors" : "/concepts"
 
   return (
     <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 pt-12 border-t mt-12 w-full">
       <div className="flex-1 flex justify-start">
         {prev && (
           <Link
-            href={`/concepts/${prev.slug}`}
+            href={`${basePath}/${prev.slug}`}
             className="w-full sm:w-auto flex items-center gap-4 p-4 rounded-2xl border border-border hover:bg-muted transition-all group"
           >
             <div className="h-10 w-10 rounded-xl bg-muted group-hover:bg-background flex items-center justify-center transition-colors">
@@ -27,7 +38,7 @@ export function ConceptNavigation({ currentSlug }: { currentSlug: string }) {
       <div className="flex-1 flex justify-end">
         {next && (
           <Link
-            href={`/concepts/${next.slug}`}
+            href={`${basePath}/${next.slug}`}
             className="w-full sm:w-auto flex items-center justify-between gap-4 p-4 rounded-2xl border border-border hover:border-primary/30 hover:bg-background transition-all group text-right"
           >
             <div className="flex flex-col items-end">
